@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <style>
+      #gaugeBar {
+        width: 100%;
+        background: linear-gradient(
+          to right,
+          red,
+          orange,
+          yellow,
+          green,
+          blue,
+          indigo,
+          violet
+        );
+        height: 30px;
+        border: 1px solid #000;
+      }
+
+      #gaugeFill {
+        height: 100%;
+        background: black;
+        width: 0%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gaugeBar">
+      <div id="gaugeFill"></div>
+    </div>
+
+    <script>
+      let a = 0;
+
+      document.body.addEventListener("click", function () {
+        a = Math.min(a + 1, 100); // 변수 a 증가, 최대 100
+        updateGauge();
+      });
+
+      function updateGauge() {
+        let fillPercentage = a + "%";
+        document.getElementById("gaugeFill").style.width = fillPercentage;
+      }
+    </script>
+    <main
+      class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900"
+    >
+      <div class="flex flex-row justify-center items-center w-full gap-8">
+        <div
+          class="w-full max-w-md p-4 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          <h2
+            class="text-2xl font-bold text-center text-gray-800 dark:text-white"
+          >
+            전환 사이트
+          </h2>
+          <p class="mt-2 text-center text-gray-600 dark:text-gray-400">
+            사각형 박스의 이상하기는 제목과 내용을 적을 수 있어요.
+          </p>
+          <div class="mt-8">
+            <form>
+              <div class="grid gap-6">
+                <div class="grid gap-2">
+                  <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="title1"
+                    >제목</label
+                  ><input
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="title1"
+                    required=""
+                  />
+                </div>
+                <div class="grid gap-2">
+                  <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="content1"
+                    >내용</label
+                  ><textarea
+                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="content1"
+                    required=""
+                  ></textarea>
+                </div>
+                <button
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+                  type="submit"
+                >
+                  전환하기
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="text-4xl font-bold text-gray-800 dark:text-white">vs</div>
+        <div
+          class="w-full max-w-md p-4 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        >
+          <h2
+            class="text-2xl font-bold text-center text-gray-800 dark:text-white"
+          >
+            전환 사이트
+          </h2>
+          <p class="mt-2 text-center text-gray-600 dark:text-gray-400">
+            사각형 박스의 이상하기는 제목과 내용을 적을 수 있어요.
+          </p>
+          <div class="mt-8">
+            <form>
+              <div class="grid gap-6">
+                <div class="grid gap-2">
+                  <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="title2"
+                    >제목</label
+                  ><input
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="title2"
+                    required=""
+                  />
+                </div>
+                <div class="grid gap-2">
+                  <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="content2"
+                    >내용</label
+                  ><textarea
+                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="content2"
+                    required=""
+                  ></textarea>
+                </div>
+                <button
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+                  type="submit"
+                >
+                  전환하기
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

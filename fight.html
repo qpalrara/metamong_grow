@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style>
+      .draggable {
+        position: absolute;
+        cursor: pointer;
+        cursor: hand;
+        width: 100px;
+        height: 100px;
+      }
+      #hpBar {
+        position: absolute;
+        width: 300px;
+        height: 30px;
+        left: 61%;
+        top: 2%;
+        border: black solid 3px;
+      }
+      #hpFill {
+        width: 300px;
+        height: 100%;
+        left: 0;
+        background: red;
+      }
+    </style>
+    <link href="button.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script type="text/javascript">
+      img_list = [
+        "https://static.wikia.nocookie.net/pokemon/images/0/09/%EB%A9%94%ED%83%80%EB%AA%BD_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170405084916&path-prefix=ko",
+        "https://thumbnail.10x10.co.kr/webimage/image/add4/188/A001880274_04.jpg?cmd=thumb&w=400&h=400&fit=true&ws=false",
+        "https://i.pinimg.com/736x/06/37/a6/0637a6ed0eb9c509e79abce6c1641204.jpg",
+        "https://img.mbn.co.kr/filewww/news/other/2016/04/15/035588060110.jpg",
+        "https://profile.img.afreecatv.com/LOGO/mc/mcbjmatch/mcbjmatch.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Faker_2020_interview.jpg/225px-Faker_2020_interview.jpg",
+        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/cjBn/image/e1qRbB15Y382IJVAbDn_7pADI1w.jpg",
+      ];
+      function getLeft(o) {
+        return parseInt(o.style.left.replace("px", ""));
+      }
+      function getTop(o) {
+        return parseInt(o.style.top.replace("px", ""));
+      }
+      class ShottableImage {
+        static instances = [];
+        constructor(lvl, l = 100, t = 600) {
+          ShottableImage.instances.push(this);
+          this.lvl = lvl;
+          this.img_L = l;
+          this.img_T = t;
+          this.v_x = 15;
+          this.v_y = -20;
+          this.img = document.createElement("img");
+          this.img.src = img_list[lvl];
+          this.img.className = "draggable";
+          this.img.style.left = this.img_L + "px";
+          this.img.style.top = this.img_T + "px";
+          document.body.appendChild(this.img);
+          this.interval = setInterval(this.update.bind(this), 20);
+        }
+
+        update() {
+          this.v_y += 0.5;
+          this.img.style.left = getLeft(this.img) + this.v_x + "px";
+          this.img.style.top = getTop(this.img) + this.v_y + "px";
+          if (getLeft(this.img) > 600) {
+            this.removeSelf();
+          }
+        }
+
+        removeSelf() {
+          for (let i = 0; i < ShottableImage.instances.length; i++) {
+            if (ShottableImage.instances[i] === this) var removal = i;
+          }
+          ShottableImage.instances.splice(removal, 1);
+          clearInterval(this.interval);
+          this.attack();
+          document.body.removeChild(this.img);
+        }
+
+        attack() {
+            var width = parseInt(getComputedStyle(document.getElementById("hpFill")).width.replace("px", ""))
+            document.getElementById("hpFill").style.width = Math.max(0, width - 3**this.lvl) + "px";
+            if (width == 0) {
+                document.write("<h1>네모네모 멈뭄미를 물리쳤따!!!!!</h1>")
+            }
+            
+        }
+      }
+      var summon = setInterval(summonObj, 500);
+
+      var s = localStorage.getItem("obj");
+      function summonObj() {
+        var lvl = s.slice(-1);
+        s = s.slice(0, -1);
+        new ShottableImage(lvl);
+        if (s == "") {
+            clearInterval(summon);
+        }
+      }
+    </script>
+
+    <img
+      src="https://media.istockphoto.com/id/652248008/ko/%EB%B2%A1%ED%84%B0/%EB%8C%80%ED%8F%AC-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98-%EB%94%94%EC%9E%90%EC%9D%B8.jpg?s=612x612&w=0&k=20&c=XRFqGFfmHHcmkcHkPZ8p5wP2EcYm_dMACZN39QceKPI="
+      style="
+        width: 200px;
+        height: 200px;
+        top: 70%;
+        position: absolute;
+        z-index: -1;
+      "
+    />
+    <img
+      src="https://images.uncyc.org/kr/thumb/b/be/%EB%A9%88%EB%A9%88.jpg/300px-%EB%A9%88%EB%A9%88.jpg"
+      style="
+        width: 600px;
+        height: 600px;
+        top: 10%;
+        left: 50%;
+        position: absolute;
+      "
+    />
+
+    <div id="hpBar"><div id="hpFill"></div></div>
+  </body>
+</html>

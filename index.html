@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style>
+      .draggable {
+        position: absolute;
+        cursor: pointer;
+        cursor: hand;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+    <link href="button.css" rel="stylesheet" />
+  </head>
+  <body>
+    <script type="text/javascript">
+      img_list = [
+        "https://static.wikia.nocookie.net/pokemon/images/0/09/%EB%A9%94%ED%83%80%EB%AA%BD_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170405084916&path-prefix=ko",
+        "https://thumbnail.10x10.co.kr/webimage/image/add4/188/A001880274_04.jpg?cmd=thumb&w=400&h=400&fit=true&ws=false",
+        "https://i.pinimg.com/736x/06/37/a6/0637a6ed0eb9c509e79abce6c1641204.jpg",
+        "https://img.mbn.co.kr/filewww/news/other/2016/04/15/035588060110.jpg",
+        "https://profile.img.afreecatv.com/LOGO/mc/mcbjmatch/mcbjmatch.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Faker_2020_interview.jpg/225px-Faker_2020_interview.jpg",
+        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/cjBn/image/e1qRbB15Y382IJVAbDn_7pADI1w.jpg"
+      ];
+      function getLeft(o) {
+        return parseInt(o.style.left.replace("px", ""));
+      }
+      function getTop(o) {
+        return parseInt(o.style.top.replace("px", ""));
+      }
+      class DraggableImage {
+        static instances = [];
+        constructor(lvl, l = Math.random() * innerWidth*0.9, t = Math.random() * innerHeight * 0.7) {
+          DraggableImage.instances.push(this);
+          this.lvl = lvl;
+          this.img_L = l;
+          this.img_T = t;
+          this.img = document.createElement("img");
+          this.img.src = img_list[lvl];
+          this.img.className = "draggable";
+          this.img.style.left = this.img_L + "px";
+          this.img.style.top = this.img_T + "px";
+          this.img.addEventListener("mousedown", this.startDrag.bind(this));
+          document.body.appendChild(this.img);
+
+          this.boundMoveDrag = this.moveDrag.bind(this);
+          this.boundStopDrag = this.stopDrag.bind(this);
+        }
+
+        moveDrag(e) {
+          var dmvx = parseInt(e.clientX + this.img_L);
+          var dmvy = parseInt(e.clientY + this.img_T);
+          this.img.style.left = dmvx + "px";
+          this.img.style.top = dmvy + "px";
+          return false;
+        }
+
+        startDrag(e) {
+          this.img_L = getLeft(this.img) - e.clientX;
+          this.img_T = getTop(this.img) - e.clientY;
+
+          document.addEventListener("mousemove", this.boundMoveDrag);
+          document.addEventListener("mouseup", this.boundStopDrag);
+          if (e.preventDefault) e.preventDefault();
+        }
+
+        stopDrag() {
+          document.removeEventListener("mousemove", this.boundMoveDrag);
+          document.removeEventListener("mouseup", this.stopDrag);
+
+          for (const obj of DraggableImage.instances) {
+            if (
+              Math.abs(getLeft(obj.img) - getLeft(this.img)) < 50 &&
+              Math.abs(getTop(obj.img) - getTop(this.img)) < 50 &&
+              this !== obj &&
+              this.lvl === obj.lvl
+            ) {
+              this.removeSelf();
+              obj.removeSelf();
+              new DraggableImage(
+                this.lvl + 1,
+                getLeft(this.img),
+                getTop(this.img)
+              );
+              break;
+            }
+          }
+        }
+
+        removeSelf() {
+          document.body.removeChild(this.img);
+          for (let i = 0; i < DraggableImage.instances.length; i++) {
+            if (DraggableImage.instances[i] === this) var removal = i;
+          }
+          DraggableImage.instances.splice(removal, 1);
+        }
+      }
+
+    </script>
+
+    <div>
+      <button class="fun-btn">소환하기</button>
+    </div>
+    
+    <a href="fight.html">
+      <button class="fight-btn">싸우러 가기</button>
+    </a>
+
+    
+    <script>
+      var btn = document.querySelector(".fun-btn");
+      btn.addEventListener("click", function() {
+        new DraggableImage(0);
+      })
+      var fight_btn = document.querySelector(".fight-btn")
+      fight_btn.addEventListener("click", function() {
+        var s = "";
+        for (obj of DraggableImage.instances) {
+          s += obj.lvl;
+        }
+        localStorage.setItem("obj", s)
+      })
+    </script>
+  </body>
+</html>
